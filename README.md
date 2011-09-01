@@ -18,7 +18,7 @@ It converts objects into property descriptors. So you can create objects like:
 
 ## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
 
-coming soon. Rewriting vows-fluent with pd.
+ - [vows-fluent annotated code][2]
 
 ## Documentation <a name="Documentation" href="#Documentation"><small><sup>link</sup></small></a>
 
@@ -83,3 +83,4 @@ is the same as
 
 
   [1]: http://raynos.github.com/pd/docs/pd.html
+  [2]: http://raynos.github.com/vows-fluent/docs/vows-fluent.html
