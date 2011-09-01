@@ -28,7 +28,7 @@ pd.object = function _obj(o) {
     return Object.create(Object.prototype, pd(o));
 };
 
-if (module && module.exports) {
+if ("undefined" !== typeof module && module.exports) {
     module.exports = pd;
 } else {
     window.pd = pd;
