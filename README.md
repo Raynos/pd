@@ -15,6 +15,10 @@ It converts objects into property descriptors. So you can create objects like:
             
         }
     }));
+    
+## Blog posts <a name="Blog_posts" href="#Blog_posts"><small><sup>link</sup></small></a>
+
+ - [Doing Object Oriented JavaScript][3]
 
 ## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
 
@@ -84,3 +88,4 @@ is the same as
 
   [1]: http://raynos.github.com/pd/docs/pd.html
   [2]: http://raynos.github.com/vows-fluent/docs/vows-fluent.html
+  [3]: http://raynos.org/blog/4/Doing-Object-Oriented-JavaScript
