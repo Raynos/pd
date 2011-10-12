@@ -1,17 +1,15 @@
 {
     "name": "pd", 
-    "version": "0.1.1", 
+    "version": "0.2.0", 
     "description": "Manage propertyDescriptors, an OO utility", 
     "keywords": ["oo", "oop", "propertydescriptor", "utility"], 
     "author": "Jake Verbaten <raynos2@gmail.com>",
     "dependencies": {},
     "main": "src/pd", 
     "engines": { 
-        "node": "0.4.x" 
+        "node": "0.5.x" 
     },
     "devDependencies": {
-        "contract": "0.1.2",
-        "vows-is": "0.1.31",
         "docco": "0.3.0"
     }
 }
