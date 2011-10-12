@@ -22,13 +22,13 @@ It converts objects into property descriptors. So you can create objects like:
 
 ## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
 
-** OUTDATED uses pd 1.1 **
+**OUTDATED uses pd 1.1**
 
  - [vows-fluent annotated code][2] 
 
 ## Documentation <a name="Documentation" href="#Documentation"><small><sup>link</sup></small></a>
 
-** OUTDATED shows pd 1.1 ** 
+**OUTDATED shows pd 1.1** 
 
 See the [annotated source code][1] 
 
