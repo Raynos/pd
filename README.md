@@ -22,13 +22,17 @@ It converts objects into property descriptors. So you can create objects like:
 
 ## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
 
- - [vows-fluent annotated code][2]
+** OUTDATED uses pd 1.1 **
+
+ - [vows-fluent annotated code][2] 
 
 ## Documentation <a name="Documentation" href="#Documentation"><small><sup>link</sup></small></a>
 
-See the [annotated source code][1]
+** OUTDATED shows pd 1.1 ** 
 
-### pd <a name="pd" href="#pd"><small><sup>link</sup></small></a>
+See the [annotated source code][1] 
+
+### pd (obj) <a name="pd" href="#pd"><small><sup>link</sup></small></a>
 
 pd converts all the values of your objects properties into propertydescriptors of those values.
 
@@ -47,11 +51,11 @@ is the same as
         }
     }
 
-### pd.merge <a name="pd.merge" href="#pd.merge"><small><sup>link</sup></small></a>
+### pd.extend (obj..) <a name="pd.extend" href="#pd.extend"><small><sup>link</sup></small></a>
 
-pd.merge merges objects together. Any key clashes are given right preference
+pd.extend extends an object with other objects. key clashes are given right preference
 
-    pd.merge(
+    pd.extend(
         {
             "one": "faz",
             "three": "bar"
@@ -73,19 +77,54 @@ is the same as
         "two": "ni",
         "three": "bas",
         "four": "four"
-    }    
+    }
+    
+pd.extend returns the first object you pass in.
 
-### pd.object <a name="pd.object" href="#pd.object"><small><sup>link</sup></small></a>
+### pd.mixin (target, source) <a name="pd.mixin" href="#pd.mixin"><small><sup>link</sup></small></a>
 
-pd.object is a simple Object.create shorthand.
+pd.mixin is virtually the same as pd.extend however it only takes two arguments and it will overwrite
+the constructor property of target with the function composition of target.constructor and source.constructor.
 
-    pd.object(o)
+    pd.mixin(SomeProto, {
+      addThisMethod: function () { },
+      constructor: function () { 
+        // invoke this constructor code after SomeProto.constructor
+      }
+    });
+    
+### pd.extendNatives <a name="pd.extendNatives" href="#pd.extendNatives"><small><sup>link</sup></small></a>
 
-is the same as
+pd.extendNatives extends some native objects and then returns pd.
 
-    Object.create(Object.prototype, pd(o));
+Specifically it will set the following if they don't exist
+
+ - Object.extend (same as pd.extend)
+ - Object.getOwnPropertyDescriptors (same as pd)
+ - Object.prototype.new (explained below)
+ 
+`Object.prototype.new` generates a new object by calling `Object.create(this)`, then invokes the constructor of that object if it exists and then returns it.
+
+This basically is meant as sugar to allow ["prototypes as classes"][4]
+
+Example:
+
+    var Proto = {
+        method: function () {
+            console.log("method");
+        },
+        constructor: function (arg) {
+            console.log("constructed", arg);    
+        }
+    };
+
+    var o = Proto.new(42); // "constructed", 42
+    console.log(Proto.isPrototypeOf(o)); // true
+    o.method(); // "method"
+
 
 
   [1]: http://raynos.github.com/pd/docs/pd.html
   [2]: http://raynos.github.com/vows-fluent/docs/vows-fluent.html
   [3]: http://raynos.org/blog/4/Doing-Object-Oriented-JavaScript
+  [4]: http://www.2ality.com/2011/06/prototypes-as-classes.html
