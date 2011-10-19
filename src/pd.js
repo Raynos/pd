@@ -1,6 +1,10 @@
-// ## [Github Repo](https://github.com/Raynos/pd)
+/*
+    pd will return all the own propertydescriptors of the object
 
-// pd converts all the values of the properties into propertydescriptors
+    @param Object obj - object to get pds from.
+
+    @return Object - A hash of key/propertyDescriptors
+*/
 var pd = function _pd(obj) {
     var keys = Object.getOwnPropertyNames(obj);
     var o = {};
@@ -11,8 +15,13 @@ var pd = function _pd(obj) {
     return o;
 };
 
-// Extend natives. This implements the getOwnPropertyDescriptors as defined in es.next
-pd.extendNatives = function _extendNatives() {
+/*
+    Will extend native objects with utility methods
+
+    @param Boolean prototypes - flag to indicate whether you want to extend
+        prototypes as well
+*/
+pd.extendNatives = function _extendNatives(prototypes) {
     if (!Object.getOwnPropertyDescriptors) {
         Object.defineProperty(Object, "getOwnPropertyDescriptors", {
             value: pd,
@@ -25,7 +34,7 @@ pd.extendNatives = function _extendNatives() {
             configurable: true
         });
     }
-    if (!Object.prototype.new) {
+    if (!Object.prototype.new && prototypes) {
         Object.defineProperty(Object.prototype, "new", {
             value: function _new() {
                 var o = Object.create(this);
@@ -37,11 +46,16 @@ pd.extendNatives = function _extendNatives() {
     }
     return pd;
 };
+/*
+    Mixin is similar to Extend except it will combine the two constructor
+    functions to ensure that the mixin is also constructed.
 
-// Mixin does the same as pd.extend except it will
-// overwrite the constructor target with the composition 
-// of the constructor of target and the constructor of source
-pd.mixin = function (target, source) {
+    @param Object target - target which the source will be mixed into
+    @param Object source - the mixin
+
+    @return Object - the target
+*/
+pd.mixin = function _mixin(target, source) {
     var constructorTarget = target.constructor,
         constructorSource = source.constructor;
         
@@ -55,11 +69,18 @@ pd.mixin = function (target, source) {
     };
     return target;
 };
+/*
+    Extend will extend the firat parameter with any other parameters 
+    passed in. Only the own property names will be extended into
+    the object
 
-// Extend is an n-ary operator that extends the first argument
-// with the own properties of the other arguments
-// returns the first argument
-pd.extend = function (target) {
+    @param Object target - target to be extended
+    @arguments Array [target, ...] - the rest of the objects passed
+        in will extended into the target
+
+    @return Object - the target
+*/
+pd.extend = function _extend(target) {
     var objs = Array.prototype.slice.call(arguments, 1);
     objs.forEach(function (obj) {
         var props = Object.getOwnPropertyNames(obj);
@@ -70,8 +91,23 @@ pd.extend = function (target) {
     return target;
 };
 
+/*
+    new will generate a new object from the proto, any other arguments
+    will be passed to proto.constructor
+
+    @param Object proto - the prototype to use for the new object
+    @arguments Array [proto, ...] - the rest of the arguments will
+        be passed into proto.constructor
+
+    @return Object - the newly created object
+*/
+pd.new = function _new(proto) {
+    var o = Object.create(proto);
+    var args = Array.prototype.slice.call(arguments, 1);
+    proto.constructor && proto.constructor.apply(o, args);
+    return o;
+};
+
 if ("undefined" !== typeof module && module.exports) {
     module.exports = pd;
-} else {
-    window.pd = pd;
 }

@@ -1,4 +1,5 @@
-var pd = require("../src/pd.js").extendNatives(),
+var pd = require("../src/pd.js").extendNatives(true),
+    tester = require("tester"),
     assert = require("assert");
     
 module.exports = {
@@ -6,6 +7,7 @@ module.exports = {
         assert(pd);
         assert(pd.mixin);
         assert(pd.extend);
+        assert(pd.extendNatives);
     },
     "test natives exists": function () {
         assert(Object.extend);
@@ -99,27 +101,16 @@ module.exports = {
         assert.equal(o.method(), 42);
         assert.equal(o.a, true);
         assert(Proto.isPrototypeOf(o));
+
+        var o = pd.new(Proto);
+        assert.equal(o.method(), 42);
+        assert.equal(o.a, true);
+        assert(Proto.isPrototypeOf(o));        
     }
 };
 
 if (!module.parent) {
-    var tests = Object.keys(module.exports);
-    var errors = []
-    var success = []
-    tests.forEach(function (test) {
-        try {
-            module.exports[test]();
-            success.push(test);
-        } catch (e) {
-            errors.push(e);
-        }
-    });
-    console.log("tests succeeded : ", success.length);
-    console.log("errors : ", errors.length);
-    errors.forEach(function (e) {
-        console.dir(e);
-        console.log(e.stack);
-    });
+    tester(module.exports);
 };
 
 
