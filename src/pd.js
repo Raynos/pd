@@ -34,6 +34,12 @@ pd.extendNatives = function _extendNatives(prototypes) {
             configurable: true
         });
     }
+    if (!Object.make) {
+        Object.defineProperty(Object, "make", {
+            value: pd.make,
+            configurable: true
+        });
+    }
     if (!Object.prototype.new && prototypes) {
         Object.defineProperty(Object.prototype, "new", {
             value: function _new() {
@@ -106,6 +112,18 @@ pd.new = function _new(proto) {
     var args = Array.prototype.slice.call(arguments, 1);
     proto.constructor && proto.constructor.apply(o, args);
     return o;
+};
+
+/*
+    make will call Object.create with the proto and pd(props)
+
+    @param Object proto - the prototype to inherit from
+    @param Object props - properties to extend the new object with
+
+    @return Object - the new object
+*/
+pd.make = function _make (proto, props) {
+    return Object.create(proto, pd(props));
 };
 
 if ("undefined" !== typeof module && module.exports) {

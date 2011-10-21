@@ -90,22 +90,20 @@ the constructor property of target with the function composition of target.const
         // invoke this constructor code after SomeProto.constructor
       }
     });
-    
-### pd.extendNatives <a name="pd.extendNatives" href="#pd.extendNatives"><small><sup>link</sup></small></a>
 
-pd.extendNatives extends some native objects and then returns pd.
+### pd.make (proto, props) <a name="pd.make" href="#pd.make"><small><sup>link</sup></small></a>
 
-Specifically it will set the following if they don't exist
+pd.make takes a prototype and some properties, it creates a new instance of the prototype and extends
+that instances with the properties.
 
- - Object.extend (same as pd.extend)
- - Object.getOwnPropertyDescriptors (same as pd)
- - Object.prototype.new (explained below)
- 
-`Object.prototype.new` generates a new object by calling `Object.create(this)`, then invokes the constructor of that object if it exists and then returns it.
+    pd.make(Proto, {
+        prop: "42"
+    });
 
-This basically is meant as sugar to allow ["prototypes as classes"][4]
+### pd.new (proto, args..) <a name="pd.new" href="#pd.new"><small><sup>link</sup</small></a>
 
-Example:
+pd.new takes a prototype and creates a new instance of it. it will then call the constructor
+property of the new instance with the arguments and finally returns the object
 
     var Proto = {
         method: function () {
@@ -116,9 +114,26 @@ Example:
         }
     };
 
-    var o = Proto.new(42); // "constructed", 42
+    var o = pd.new(Proto, 42); // "constructed", 42
     console.log(Proto.isPrototypeOf(o)); // true
     o.method(); // "method"
+
+This basically is meant as sugar to allow ["prototypes as classes"][4]
+    
+### pd.extendNatives <a name="pd.extendNatives" href="#pd.extendNatives"><small><sup>link</sup></small></a>
+
+pd.extendNatives extends some native objects and then returns pd.
+
+Specifically it will set the following if they don't exist
+
+ - Object.extend (same as pd.extend)
+ - Object.getOwnPropertyDescriptors (same as pd)
+ - Object.prototype.new (same as pd.new)
+ - Object.make (same as pd.make)
+
+An example of `.new` which only takes arguments
+
+    Proto.new(42)
 
 
 

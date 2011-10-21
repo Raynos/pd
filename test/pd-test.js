@@ -106,6 +106,18 @@ module.exports = {
         assert.equal(o.method(), 42);
         assert.equal(o.a, true);
         assert(Proto.isPrototypeOf(o));        
+    },
+    "test make": function () {
+        var Proto = {};
+        var o = pd.make(Proto, {
+            "one": "two",
+            "three": Proto
+        });
+        assert(Proto.isPrototypeOf(o));
+        assert(o.hasOwnProperty("one"));
+        assert(o.one === "two");
+        assert(o.three === Proto);
+        assert(o.hasOwnProperty("three"));
     }
 };
 
