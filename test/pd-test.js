@@ -5,14 +5,18 @@ var pd = require("../src/pd.js").extendNatives(true),
 module.exports = {
     "test pd exists": function () {
         assert(pd);
-        assert(pd.mixin);
+        assert(pd.beget);
+        assert(pd.make);
+        assert(pd.Name);
         assert(pd.extend);
         assert(pd.extendNatives);
     },
     "test natives exists": function () {
         assert(Object.extend);
         assert.deepEqual(Object.extend, pd.extend);
-        assert(Object.prototype.new);
+        assert(Object.prototype.beget);
+        assert(Object.beget);
+        assert.deepEqual(Object.beget, pd.beget);
         assert(Object.getOwnPropertyDescriptors);
         assert.deepEqual(Object.getOwnPropertyDescriptors, pd);
     },
@@ -62,7 +66,7 @@ module.exports = {
             overwrite: "good value"
         });
     },
-    "test pd.mixin": function () { 
+    "test .beget": function () {
         var Proto = {
             method: function () {
                 return 42;
@@ -72,37 +76,12 @@ module.exports = {
             }
         }
         
-        var Mixin = {
-            otherMethod: function () {
-                return 43;
-            },
-            constructor: function () {
-                this.b = true;
-            }
-        }
-        pd.mixin(Proto, Mixin);
-        var o = Proto.new();
-        assert.equal(o.method(), 42);
-        assert.equal(o.otherMethod(), 43);
-        assert.equal(o.a, true);
-        assert.equal(o.b, true);
-    },
-    "test .new": function () {
-        var Proto = {
-            method: function () {
-                return 42;
-            },
-            constructor: function () {
-                this.a = true;
-            }
-        }
-        
-        var o = Proto.new();
+        var o = Proto.beget();
         assert.equal(o.method(), 42);
         assert.equal(o.a, true);
         assert(Proto.isPrototypeOf(o));
 
-        var o = pd.new(Proto);
+        var o = pd.beget(Proto);
         assert.equal(o.method(), 42);
         assert.equal(o.a, true);
         assert(Proto.isPrototypeOf(o));        

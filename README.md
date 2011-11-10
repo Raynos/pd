@@ -24,11 +24,11 @@ It converts objects into property descriptors. So you can create objects like:
 
 ## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
 
- - [vows-fluent annotated code][2] **OUTDATED uses pd 0.1.1**
+ More coming soon!
 
 ## Documentation <a name="Documentation" href="#Documentation"><small><sup>link</sup></small></a>
 
-See the [annotated source code][1] **OUTDATED shows pd 0.1.1** 
+See the source >_>
 
 ### pd (obj) <a name="pd" href="#pd"><small><sup>link</sup></small></a>
 
@@ -88,9 +88,9 @@ that instances with the properties.
         prop: "42"
     });
 
-### pd.new (proto, args..) <a name="pd.new" href="#pd.new"><small><sup>link</sup</small></a>
+### pd.beget (proto, args..) <a name="pd.beget" href="#pd.beget"><small><sup>link</sup</small></a>
 
-pd.new takes a prototype and creates a new instance of it. it will then call the constructor
+pd.beget takes a prototype and creates a new instance of it. it will then call the constructor
 property of the new instance with the arguments and finally returns the object
 
     var Proto = {
@@ -122,6 +122,10 @@ Specifically it will set the following if they don't exist
 An example of `.new` which only takes arguments
 
     Proto.new(42)
+
+### pd.Name <a name="pd.Name" href="#pdName"><small><sup>link</sup</small></a>
+
+pd.Name does shit, read the source \o/. I mean docs soon.
 
 
   [1]: http://raynos.github.com/pd/docs/pd.html
