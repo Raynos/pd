@@ -7,7 +7,7 @@ pd is short for property descriptor.
 It converts objects into property descriptors. So you can create objects like:
 
     var o = Object.create(somePrototype, pd({
-        "someProp": "someValue"
+        "someProp": "someValue",
         get someGetter() {
             
         },
@@ -24,7 +24,7 @@ It converts objects into property descriptors. So you can create objects like:
 
 ## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
 
- More coming soon!
+ [OO utilities][7]
 
 ## Documentation <a name="Documentation" href="#Documentation"><small><sup>link</sup></small></a>
 
@@ -116,8 +116,10 @@ Specifically it will set the following if they don't exist
 
  - Object.extend (same as pd.extend)
  - Object.getOwnPropertyDescriptors (same as pd)
- - Object.prototype.new (same as pd.new)
+ - Object.beget (same as pd.beget)
+ - Object.prototype.beget (same as pd.beget)
  - Object.make (same as pd.make)
+ - Object.Name (same as pd.Name)
 
 An example of `.new` which only takes arguments
 
@@ -134,3 +136,4 @@ pd.Name does shit, read the source \o/. I mean docs soon.
   [4]: http://www.2ality.com/2011/06/prototypes-as-classes.html
   [5]: http://raynos.org/blog/5/Doing-Object-Oriented-Javascript---part-2
   [6]: http://raynos.org/blog/7/Doing-Object-Oriented-Javascript---part-3
+  [7]: https://gist.github.com/1352801
