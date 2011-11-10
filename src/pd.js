@@ -111,12 +111,18 @@
         make will call Object.create with the proto and pd(props)
 
         @param Object proto - the prototype to inherit from
-        @param Object props - properties to extend the new object with
+        @arguments Array [proto, ...] - the rest of the arguments will
+            be mixed into the object, i.e. the object will be extend
+            with the objects
 
         @return Object - the new object
     */
-    function make (proto, props) {
-        return Object.create(proto, pd(props));
+    function make (proto) {
+        var o = Object.create(proto);
+        var args = [].slice.call(arguments, 1);
+        args.unshift(o);
+        extend.apply(null, args);
+        return o;
     }
 
     function defineNamespace(object, namespace) {
