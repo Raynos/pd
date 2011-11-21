@@ -24,10 +24,10 @@ pd solves this with utilities and sugar.
 
 ## Blog Posts
 
- - [Doing Object Oriented JavaScript][3]
- - [Doing OO JS part 2][5]
- - [Doing OO JS part 3][6]
  - [Improving ES5 OO][9]
+ - [Doing OO JS part 3][6]
+ - [Doing OO JS part 2][5]
+ - [Doing Object Oriented JavaScript][3]
 
 ## Documentation
 
