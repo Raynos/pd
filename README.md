@@ -1,34 +1,35 @@
-# pd <a name="_pd" href="#_pd"><small><sup>link</sup></small></a>
+# pd
 
-A small utility for writing OO javascript.
+Helping you do prototypical OO
 
-pd is short for property descriptor.
+## Example 
 
-It converts objects into property descriptors. So you can create objects like:
+    var Animal = {
+        legs: 4,
+        walk: function () { ... }
+    };
 
-    var o = Object.create(somePrototype, pd({
-        "someProp": "someValue",
-        get someGetter() {
-            
-        },
-        set someSetter() {
-            
-        }
-    }));
-    
-## Blog posts <a name="Blog_posts" href="#Blog_posts"><small><sup>link</sup></small></a>
+    var Cat = pd.make(Animal, {
+        nyan: function () { ... },
+        constructor: function () { this.lives = 9; }
+    });
+
+    var cat = pd.beget(Cat);
+
+## Motivation
+
+ES5 OO is [verbose][8]
+
+pd solves this with utilities and sugar.
+
+## Blog Posts
 
  - [Doing Object Oriented JavaScript][3]
  - [Doing OO JS part 2][5]
  - [Doing OO JS part 3][6]
+ - [Improving ES5 OO][9]
 
-## Examples <a name="Examples" href="#Examples"><small><sup>link</sup></small></a>
-
- [OO utilities][7]
-
-## Documentation <a name="Documentation" href="#Documentation"><small><sup>link</sup></small></a>
-
-See the source >_>
+## Documentation
 
 ### pd (obj) <a name="pd" href="#pd"><small><sup>link</sup></small></a>
 
@@ -79,19 +80,19 @@ is the same as
     
 pd.extend returns the first object you pass in.
 
-### pd.make (proto, props) <a name="pd.make" href="#pd.make"><small><sup>link</sup></small></a>
+### pd.make (proto, props...) <a name="pd.make" href="#pd.make"><small><sup>link</sup></small></a>
 
-pd.make takes a prototype and some properties, it creates a new instance of the prototype and extends
-that instances with the properties.
+pd.make takes a prototype and some properties, it creates a new instance of the prototype and extends that instances with the properties.
 
     pd.make(Proto, {
         prop: "42"
+    }, {
+        another_prop: 42
     });
 
 ### pd.beget (proto, args..) <a name="pd.beget" href="#pd.beget"><small><sup>link</sup</small></a>
 
-pd.beget takes a prototype and creates a new instance of it. it will then call the constructor
-property of the new instance with the arguments and finally returns the object
+pd.beget takes a prototype and creates a new instance of it. it will then call the constructor property of the new instance with the arguments and finally returns the object
 
     var Proto = {
         method: function () {
@@ -102,7 +103,7 @@ property of the new instance with the arguments and finally returns the object
         }
     };
 
-    var o = pd.new(Proto, 42); // "constructed", 42
+    var o = pd.beget(Proto, 42); // "constructed", 42
     console.log(Proto.isPrototypeOf(o)); // true
     o.method(); // "method"
 
@@ -131,9 +132,9 @@ Example:
  - Object.prototype.make (same as pd.make)
  - Object.prototype.extend (same as pd.extend)
 
-An example of `.new` which only takes arguments
+An example of `.beget` which only takes arguments
 
-    var instance = Proto.new(42)
+    var instance = Proto.beget(42)
 
 An example of `.make` which only extends it with one argument
 
@@ -164,11 +165,24 @@ Example:
         };
     }());
 
+## Installation
 
-  [1]: http://raynos.github.com/pd/docs/pd.html
-  [2]: http://raynos.github.com/vows-fluent/docs/vows-fluent.html
+npm install pd
+
+## Test
+
+node tests/pd-test.js
+
+## Contributors
+
+ - Raynos
+ - Gozala
+
+## MIT Licenced
+
   [3]: http://raynos.org/blog/4/Doing-Object-Oriented-JavaScript
   [4]: http://www.2ality.com/2011/06/prototypes-as-classes.html
   [5]: http://raynos.org/blog/5/Doing-Object-Oriented-Javascript---part-2
   [6]: http://raynos.org/blog/7/Doing-Object-Oriented-Javascript---part-3
-  [7]: https://gist.github.com/1352801
+  [8]: https://gist.github.com/1384024
+  [9]: http://raynos.org/blog/17/Improving-ES5-OO-with-pd
