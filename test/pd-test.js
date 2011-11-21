@@ -97,6 +97,16 @@ module.exports = {
         assert(o.one === "two");
         assert(o.three === Proto);
         assert(o.hasOwnProperty("three"));
+
+        var o = Proto.make({
+            "one": "two",
+            "three": Proto 
+        });
+        assert(Proto.isPrototypeOf(o));
+        assert(o.hasOwnProperty("one"));
+        assert(o.one === "two");
+        assert(o.three === Proto);
+        assert(o.hasOwnProperty("three"));
     }
 };
 

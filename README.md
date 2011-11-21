@@ -118,6 +118,7 @@ Specifically it will set the following if they don't exist
  - Object.getOwnPropertyDescriptors (same as pd)
  - Object.beget (same as pd.beget)
  - Object.prototype.beget (same as pd.beget)
+ - Object.prototype.make (same as pd.make)
  - Object.make (same as pd.make)
  - Object.Name (same as pd.Name)
 
@@ -125,9 +126,30 @@ An example of `.new` which only takes arguments
 
     Proto.new(42)
 
+An example of `.make` which only extends it with one argument
+
+    Proto.make({ /* subclass properties */ })
+
 ### pd.Name <a name="pd.Name" href="#pdName"><small><sup>link</sup</small></a>
 
-pd.Name does shit, read the source \o/. I mean docs soon.
+pd.Name constructs a Name function. This name function when passed your object will
+return a privates object. This privates object cannot be accessed in any other 
+way then calling Name.
+
+Example:
+
+    var Klass = (function () {
+        var privates = pd.Name();
+
+        return {
+            constructor: function (secret) {
+                privates(this).secret = secret;
+            },
+            getSecret: function () {
+                return privates(this).secret;
+            }
+        };
+    }());
 
 
   [1]: http://raynos.github.com/pd/docs/pd.html

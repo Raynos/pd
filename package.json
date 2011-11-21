@@ -1,6 +1,6 @@
 {
     "name": "pd", 
-    "version": "0.3.1", 
+    "version": "0.3.2", 
     "description": "Manage propertyDescriptors, an OO utility", 
     "keywords": ["oo", "oop", "propertydescriptor", "arch", "utility"], 
     "author": "Jake Verbaten <raynos2@gmail.com>",

@@ -49,7 +49,7 @@
                 configurable: true
             })
         }
-        if (!Object.prototype["beget"] && prototypes) {
+        if (!Object.prototype.beget && prototypes) {
             Object.defineProperty(Object.prototype, "beget", {
                 value: function _beget() {
                     var o = Object.create(this);
@@ -58,6 +58,15 @@
                 }, 
                 configurable: true
             });
+        }
+        if (!Object.prototype.make && prototypes) {
+            Object.defineProperty(Object.prototype, "make", {
+                value: function _make() {
+                    var arr = [].slice.call(arguments);
+                    return make.apply(null, [this].concat(arr));
+                },
+                configurable: true
+            })
         }
         if (!Object.Name) {
             Object.defineProperty(Object, "Name", {
@@ -125,6 +134,15 @@
         return o;
     }
 
+    /*
+        defines a namespace object. This hides a "privates" object on object 
+        under the "key" namespace
+
+        @param Object object - object to hide a privates object on
+        @param Object namespace - key to hide it under
+
+        @return Object privates
+    */
     function defineNamespace(object, namespace) {
         var privates = Object.create(object), 
             base = object.valueOf;
@@ -142,6 +160,12 @@
         return privates;
     }
 
+    /*
+        Constructs a Name function, when given an object it will return a
+        privates object. 
+
+        @return Function name
+    */
     function Name() {
         var namespace = {};
 
