@@ -58,7 +58,17 @@ module.exports = {
             moreThings: "baz",
             overwrite: "good value"
         };
-        pd.extend(o1,o2,o3);
+        var o4 = {};
+
+        pd.extend(o4, o1,o2,o3);
+        assert.deepEqual(o4, {
+            things: "foo",
+            otherThings: "bar",
+            moreThings: "baz",
+            overwrite: "good value"
+        });
+
+        o1.extend(o2, o3);
         assert.deepEqual(o1, {
             things: "foo",
             otherThings: "bar",

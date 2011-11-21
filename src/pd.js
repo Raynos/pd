@@ -25,6 +25,8 @@
             prototypes as well
     */
     function extendNatives(prototypes) {
+        prototypes === true && (prototypes = ["make", "beget", "extend"]);
+
         if (!Object.getOwnPropertyDescriptors) {
             Object.defineProperty(Object, "getOwnPropertyDescriptors", {
                 value: pd,
@@ -49,7 +51,7 @@
                 configurable: true
             })
         }
-        if (!Object.prototype.beget && prototypes) {
+        if (!Object.prototype.beget && prototypes.indexOf("beget") !== -1) {
             Object.defineProperty(Object.prototype, "beget", {
                 value: function _beget() {
                     var o = Object.create(this);
@@ -59,14 +61,22 @@
                 configurable: true
             });
         }
-        if (!Object.prototype.make && prototypes) {
+        if (!Object.prototype.make && prototypes.indexOf("make") !== -1) {
             Object.defineProperty(Object.prototype, "make", {
                 value: function _make() {
-                    var arr = [].slice.call(arguments);
-                    return make.apply(null, [this].concat(arr));
+                    var args = [].slice.call(arguments);
+                    return make.apply(null, [this].concat(args));
                 },
                 configurable: true
-            })
+            });
+        }
+        if (!Object.prototype.extend && prototypes.indexOf("extend") !== -1) {
+            Object.defineProperty(Object.prototype, "extend", {
+                value: function _extend() {
+                    var args = [].slice.call(arguments);
+                    return extend.apply(null, [this].concat(args));
+                } 
+            });
         }
         if (!Object.Name) {
             Object.defineProperty(Object, "Name", {
