@@ -117,18 +117,31 @@ Specifically it will set the following if they don't exist
  - Object.extend (same as pd.extend)
  - Object.getOwnPropertyDescriptors (same as pd)
  - Object.beget (same as pd.beget)
- - Object.prototype.beget (same as pd.beget)
- - Object.prototype.make (same as pd.make)
  - Object.make (same as pd.make)
  - Object.Name (same as pd.Name)
 
+It will also augment `Object.prototype` if you pass in `true` as the first argument
+You can also pass an array of properties you want it to be extended with.
+
+Example:
+
+    pd.extendNatives(["beget"])
+
+ - Object.prototype.beget (same as pd.beget)
+ - Object.prototype.make (same as pd.make)
+ - Object.prototype.extend (same as pd.extend)
+
 An example of `.new` which only takes arguments
 
-    Proto.new(42)
+    var instance = Proto.new(42)
 
 An example of `.make` which only extends it with one argument
 
-    Proto.make({ /* subclass properties */ })
+    var SubClass = Proto.make({ /* subclass properties */ })
+
+An example of `.extend` (extend mutates the object)
+
+    Proto.extend({ /* more proto properties */ })
 
 ### pd.Name <a name="pd.Name" href="#pdName"><small><sup>link</sup</small></a>
 
