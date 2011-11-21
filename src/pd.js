@@ -151,7 +151,7 @@
         @param Object object - object to hide a privates object on
         @param Object namespace - key to hide it under
 
-        @author Gonzola : https://gist.github.com/1269991
+        @author Gozala : https://gist.github.com/1269991
 
         @return Object privates
     */
@@ -176,7 +176,7 @@
         Constructs a Name function, when given an object it will return a
         privates object. 
 
-        @author Gonzola : https://gist.github.com/1269991
+        @author Gozala : https://gist.github.com/1269991
 
         @return Function name
     */
