@@ -165,6 +165,19 @@ Example:
         };
     }());
 
+### pd.Base <a name="pd.Base" href="#pd.Base"><small><sup>link</sup></small></a>
+
+There is also a `pd.Base` object which has the method `extend`, `beget` and `make` defined on it.
+
+This means you can program in a style that would normally require extending `Object.prototype`.
+
+Example:
+
+    var Child = pd.Base.make({ /* child props */ });
+    Child.extend({ /* more props */ });
+
+    var childInstance = Child.beget();
+
 ## Installation
 
 npm install pd

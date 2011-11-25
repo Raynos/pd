@@ -18,6 +18,13 @@
         return o;
     }
 
+    function operateOnThis(method) {
+        return function _onThis() {
+            var args = [].slice.call(arguments);
+            return method.apply(null, [this].concat(args));
+        }
+    }
+
     /*
         Will extend native objects with utility methods
 
@@ -53,29 +60,20 @@
         }
         if (!Object.prototype.beget && prototypes.indexOf("beget") !== -1) {
             Object.defineProperty(Object.prototype, "beget", {
-                value: function _beget() {
-                    var o = Object.create(this);
-                    o.constructor && o.constructor.apply(o, arguments);
-                    return o;
-                }, 
+                value: operateOnThis(beget), 
                 configurable: true
             });
         }
         if (!Object.prototype.make && prototypes.indexOf("make") !== -1) {
             Object.defineProperty(Object.prototype, "make", {
-                value: function _make() {
-                    var args = [].slice.call(arguments);
-                    return make.apply(null, [this].concat(args));
-                },
+                value: operateOnThis(make),
                 configurable: true
             });
         }
         if (!Object.prototype.extend && prototypes.indexOf("extend") !== -1) {
             Object.defineProperty(Object.prototype, "extend", {
-                value: function _extend() {
-                    var args = [].slice.call(arguments);
-                    return extend.apply(null, [this].concat(args));
-                } 
+                value: operateOnThis(extend),
+                configurable: true
             });
         }
         if (!Object.Name) {
@@ -193,12 +191,19 @@
         };
     }
 
+    var Base = {
+        extend: operateOnThis(extend),
+        make: operateOnThis(make),
+        beget: operateOnThis(beget)
+    }
+
     extend(pd, {
         make: make,
         extend: extend,
         beget: beget,
         extendNatives: extendNatives,
-        Name: Name
+        Name: Name,
+        Base: Base
     });
 
     exports(pd);

@@ -117,6 +117,17 @@ module.exports = {
         assert(o.one === "two");
         assert(o.three === Proto);
         assert(o.hasOwnProperty("three"));
+    },
+    "test Base": function () {
+        var Child = pd.Base.make({
+            foo: "bar"
+        });
+
+        Child.extend({ "baz": "boz"});
+        assert(Child.baz === "boz");
+
+        var c = Child.beget();
+        assert(c.foo === "bar");
     }
 };
 
