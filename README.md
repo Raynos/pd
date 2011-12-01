@@ -4,17 +4,17 @@ Helping you do prototypical OO
 
 ## Example 
 
-    var Animal = {
+    var Animal = pd.Base.make({
         legs: 4,
         walk: function () { ... }
-    };
+    });
 
-    var Cat = pd.make(Animal, {
+    var Cat = Animal.make({
         nyan: function () { ... },
         constructor: function () { this.lives = 9; }
     });
 
-    var cat = pd.beget(Cat);
+    var cat = Cat.beget();
 
 ## Motivation
 

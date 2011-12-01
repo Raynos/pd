@@ -2,13 +2,33 @@
     "use strict";
 
     /*
+        Base object to inherit from, exposes extend, make and beget as methods
+    */
+    var Base = {
+        extend: operateOnThis(extend),
+        make: operateOnThis(make),
+        beget: operateOnThis(beget)
+    };
+
+    extend(getOwnPropertyDescriptors, {
+        make: make,
+        extend: extend,
+        beget: beget,
+        extendNatives: extendNatives,
+        Name: Name,
+        Base: Base
+    });
+
+    exports(getOwnPropertyDescriptors);
+
+    /*
         pd will return all the own propertydescriptors of the object
 
         @param Object obj - object to get pds from.
 
         @return Object - A hash of key/propertyDescriptors
     */    
-    function pd(obj) {
+    function getOwnPropertyDescriptors(obj) {
         var keys = Object.getOwnPropertyNames(obj);
         var o = {};
         keys.forEach(function _each(key) {
@@ -16,73 +36,6 @@
             o[key] = pd;
         });
         return o;
-    }
-
-    function operateOnThis(method) {
-        return function _onThis() {
-            var args = [].slice.call(arguments);
-            return method.apply(null, [this].concat(args));
-        }
-    }
-
-    /*
-        Will extend native objects with utility methods
-
-        @param Boolean prototypes - flag to indicate whether you want to extend
-            prototypes as well
-    */
-    function extendNatives(prototypes) {
-        prototypes === true && (prototypes = ["make", "beget", "extend"]);
-
-        if (!Object.getOwnPropertyDescriptors) {
-            Object.defineProperty(Object, "getOwnPropertyDescriptors", {
-                value: pd,
-                configurable: true
-            });
-        }
-        if (!Object.extend) {
-            Object.defineProperty(Object, "extend", {
-                value: pd.extend,
-                configurable: true
-            });
-        }
-        if (!Object.make) {
-            Object.defineProperty(Object, "make", {
-                value: pd.make,
-                configurable: true
-            });
-        }
-        if (!Object.beget) {
-            Object.defineProperty(Object, "beget", {
-                value: beget,
-                configurable: true
-            })
-        }
-        if (!Object.prototype.beget && prototypes.indexOf("beget") !== -1) {
-            Object.defineProperty(Object.prototype, "beget", {
-                value: operateOnThis(beget), 
-                configurable: true
-            });
-        }
-        if (!Object.prototype.make && prototypes.indexOf("make") !== -1) {
-            Object.defineProperty(Object.prototype, "make", {
-                value: operateOnThis(make),
-                configurable: true
-            });
-        }
-        if (!Object.prototype.extend && prototypes.indexOf("extend") !== -1) {
-            Object.defineProperty(Object.prototype, "extend", {
-                value: operateOnThis(extend),
-                configurable: true
-            });
-        }
-        if (!Object.Name) {
-            Object.defineProperty(Object, "Name", {
-                value: Name,
-                configurable: true
-            });
-        }
-        return pd;    
     }
 
     /*
@@ -108,23 +61,6 @@
     }
 
     /*
-        beget will generate a new object from the proto, any other arguments
-        will be passed to proto.constructor
-
-        @param Object proto - the prototype to use for the new object
-        @arguments Array [proto, ...] - the rest of the arguments will
-            be passed into proto.constructor
-
-        @return Object - the newly created object
-    */
-    function beget(proto) {
-        var o = Object.create(proto);
-        var args = Array.prototype.slice.call(arguments, 1);
-        proto.constructor && proto.constructor.apply(o, args);
-        return o;
-    }
-
-    /*
         make will call Object.create with the proto and pd(props)
 
         @param Object proto - the prototype to inherit from
@@ -139,6 +75,23 @@
         var args = [].slice.call(arguments, 1);
         args.unshift(o);
         extend.apply(null, args);
+        return o;
+    }
+
+    /*
+        beget will generate a new object from the proto, any other arguments
+        will be passed to proto.constructor
+
+        @param Object proto - the prototype to use for the new object
+        @arguments Array [proto, ...] - the rest of the arguments will
+            be passed into proto.constructor
+
+        @return Object - the newly created object
+    */
+    function beget(proto) {
+        var o = Object.create(proto);
+        var args = Array.prototype.slice.call(arguments, 1);
+        proto.constructor && proto.constructor.apply(o, args);
         return o;
     }
 
@@ -191,22 +144,63 @@
         };
     }
 
-    var Base = {
-        extend: operateOnThis(extend),
-        make: operateOnThis(make),
-        beget: operateOnThis(beget)
+    /*
+        Utility function, takes a function and returns a new function
+            which will curry `this` as the first argument
+
+        @param Function method - method to curry this on
+
+        @return Function - new function which invokes method with `this`
+    */
+    function operateOnThis(method) {
+        return function _onThis() {
+            var args = [].slice.call(arguments);
+            return method.apply(null, [this].concat(args));
+        }
     }
 
-    extend(pd, {
-        make: make,
-        extend: extend,
-        beget: beget,
-        extendNatives: extendNatives,
-        Name: Name,
-        Base: Base
-    });
+    /*
+        Will extend native objects with utility methods
 
-    exports(pd);
+        @param Boolean prototypes - flag to indicate whether you want to extend
+            prototypes as well
+    */
+    function extendNatives(prototypes) {
+        prototypes === true && (prototypes = ["make", "beget", "extend"]);
+
+        if (!Object.getOwnPropertyDescriptors) {
+            Object.defineProperty(Object, "getOwnPropertyDescriptors", {
+                value: getOwnPropertyDescriptors,
+                configurable: true
+            });
+        }
+
+        [
+            "extend",
+            "make",
+            "beget",
+            "Name"
+        ].forEach(function (name) {
+            if (!Object[name]) {
+                Object.defineProperty(Object, name, {
+                    value: getOwnPropertyDescriptors[name],
+                    configurable: true
+                });
+            }
+
+            if (name !== "Name" && 
+                !Object.prototype[name] &&
+                prototypes.indexOf(name) !== -1
+            ) {
+                Object.defineProperty(Object.prototype, name, {
+                    value: operateOnThis(getOwnPropertyDescriptors[name]),
+                    configurable: true
+                });
+            }
+        });
+
+        return getOwnPropertyDescriptors;
+    }
 
 })(function (data) {
     if (typeof module !== "undefined" && module.exports) {
