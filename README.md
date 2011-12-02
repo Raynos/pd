@@ -2,6 +2,8 @@
 
 Helping you do prototypical OO
 
+## Status: production ready
+
 ## Example 
 
     var Animal = pd.Base.make({
