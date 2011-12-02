@@ -237,6 +237,11 @@ Forked from [idiomatic.js][1]
 
 	```
 
+	Examples:
+	
+	 - [pd][2]
+	 - [after][3]
+
 5. <a name="naming">Naming</a>
 
 	Use sensible, readable names
@@ -386,3 +391,5 @@ Forked from [idiomatic.js][1]
  - single block comment above a function
 
   [1]: https://github.com/rwldrn/idiomatic.js
+  [2]: https://github.com/Raynos/pd/blob/e1ca84aba1282f0bd62112050adb4d5263a0ea33/src/pd.js
+  [3]: https://github.com/Raynos/after.js/blob/7054d2788aa2175b6178ea31e260f6e9c6fc01c4/src/after.js
