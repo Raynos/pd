@@ -167,7 +167,7 @@ Forked from [idiomatic.js][1]
 	// 3.2.1
 	// Type coercion and evaluation notes
 
-	Always use `===` even for `x == null` favour the more verbose alternative
+	Always use === even for x == null favour the more verbose alternative
 
 	x === null || x === undefined
 
