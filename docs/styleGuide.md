@@ -40,7 +40,7 @@ Forked from [idiomatic.js][1]
 
 	while (condition) {
 		// statements
-		}
+	}
 
 	for (var i = 0; i < 100; i++) {
 		// statements
