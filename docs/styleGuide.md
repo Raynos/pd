@@ -92,7 +92,7 @@ Forked from [idiomatic.js][1]
 	// 2.B.2.1
 	// Named Function Declaration
 	function foo(arg1, argN) {
-
+		/* code */
 	}
 
 	// Usage
@@ -103,7 +103,6 @@ Forked from [idiomatic.js][1]
 	// Named Function (w/ callback argument)
 	// callbacks will always be the last argument
 	function bar(arg1, callback) {
-
 		if (arg1 && callback) {
 			callback();
 		}
@@ -121,12 +120,12 @@ Forked from [idiomatic.js][1]
 	// Function Expression
 	// Never use non-anonymous function expressions
 	// Always favour function declarations.
-	// Only exception is the desire to have a single anonymous function in
+	// A exception is the desire to have a single anonymous function in
 	// global scope
 
 	(function _yourSingleGlobalAnonymousFunctionClosure () {
 		/* code */
-	})
+	}())
 
 	// Another exception is NFE on an object literal
 
@@ -139,11 +138,11 @@ Forked from [idiomatic.js][1]
 	// 2.B.2.4
 	// Constructor definition
 	// Don't use them. Use prototypical OO
-	```
 
 	E. End of Lines and Empty Lines
 
 	Whitespace can ruin diffs and make changesets impossible to read. Consider incorporating a pre-commit hook that removes end-of-line whitespace and blanks spaces on empty lines automatically.
+	```
 
 3. <a name="cond">Conditional Evaluation</a>
 
@@ -200,11 +199,10 @@ Forked from [idiomatic.js][1]
 		if (typeof module !== "undefined" && module.exports) {
 			module.exports = SomeObject;
 		} else {
-			global.Object = SomeObject;
+			global.SomeObject = SomeObject;
 		}
-		
 
-	})(global || window);
+	}(global || window));
 
 
 	// 4.2.1
@@ -232,10 +230,10 @@ Forked from [idiomatic.js][1]
 		if (typeof module !== "undefined" && module.exports) {
 			module.exports = SomeObject;
 		} else {
-			global.Object = SomeObject;
+			global.SomeObject = SomeObject;
 		}
 
-	})( global || window );
+	}( global || window ));
 
 	```
 
@@ -243,6 +241,7 @@ Forked from [idiomatic.js][1]
 
 	Use sensible, readable names
 
+	```javascript
 	// 5.1
 	// Naming style
 
@@ -306,6 +305,22 @@ Forked from [idiomatic.js][1]
     // Return statements have a new line after them
     // lines of code should be broken up with a new line 
     // unless they are manipulation the same object
+    // Don't add a new at the start of a function or the end
+    // unless it's the global wrapper
+
+    // Good:
+
+    (function _anonWrapper() {
+    	
+    	function name(param) {
+    		var o = param;
+
+    		o++;
+
+    		return o;
+    	}
+
+    }());
 
     C. inner Function declarations at the bottom
 
