@@ -9,6 +9,9 @@
     "engines": { 
         "node": "0.6.x" 
     },
+    "scripts": {
+        "test": "node test/pd-test.js"  
+    },
     "devDependencies": {
         "tester": "0.0.4"
     }
