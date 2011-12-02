@@ -384,7 +384,83 @@ Forked from [idiomatic.js][1]
 
     E. line length shall be 100 characters, no more, no exceptions.
 
+    To match line length properly you shall split up expression as follows
+
+    // 6.E.1.1
+
+    // Bad
+
+    if (condition1 !== false && condition2 !== false && condition3 !== false && condition4 !== false) {
+        // codez
+    }
+
+    // Good
+
+    if (condition1 !== false &&
+        condition2 !== false &&
+        condition3 !== false &&
+        condition4 !== false
+    ) {
+        // codez
+    }
+
+    // 6.E.2.1
+
+    // Bad
+
+    invoke("string", "foobar", longNameIsHere, ["literal", "array", "is", "here"]);
+
+    // Good
+    // Split the invocation into either two lines at a sensible point
+
+    invoke("string", "foobar", 
+        longNameIsHere, ["literal", "array", "is", "here"]);
+
+    // Also Good
+    // If each segment is long split into multiple lines
+
+    invoke(
+        "string", 
+        "foobar", 
+        longNameIsHere, 
+        ["literal", "array", "is", "here"]
+    );
+
+    // 6.E.3.1
+
+    // Bad
+
+    ["long", "long", "long", "long", "long", "long", "long", "long", "long", "long", "long", "long"];
+
+    // Good
+
+    ["long", "long", "long", "long", "long", "long", 
+        "long", "long", "long", "long", "long", "long"];
+
+    // Also Good
+
+    [
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long", 
+        "long"
+    ];
+
 	```
+
+    If your line length is hurt because of nesting 
+    Then that is because your doing it wrong.
+
+    Block nesting should be favoured to 2 and limited to 3. 
+    If it is more then it needs to refactored.
 
 7. <a name="comments">Comments</a>
 
