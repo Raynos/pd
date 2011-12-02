@@ -155,10 +155,10 @@ Forked from [idiomatic.js][1]
 	// 3.1.1
 	// When only evaluating that an array has length,
 	// instead of this:
-	if ( array.length > 0 ) ...
+	if (array.length > 0) ...
 
 	// ...evaluate truthiness, like this:
-	if ( array.length ) ...
+	if (array.length) ...
 	```
 
 
@@ -376,6 +376,8 @@ Forked from [idiomatic.js][1]
     }
 
     D. Always "use strict";
+
+    E. line length shall be 100 characters, no more, no exceptions.
 
 	```
 
