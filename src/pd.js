@@ -137,7 +137,7 @@
         var privates = create(object), 
             base = object.valueOf;
 
-        defineProperty(object, 'valueOf', { 
+        defineProperty(object, 'valueOf', {
             value: valueOf
         });
 
@@ -202,7 +202,7 @@
         prototypes === true && (prototypes = ["make", "beget", "extend"]);
 
         if (!Object.getOwnPropertyDescriptors) {
-            define(Object, "getOwnPropertyDescriptors", 
+            define(Object, "getOwnPropertyDescriptors",
                 getOwnPropertyDescriptors);
         }
 
