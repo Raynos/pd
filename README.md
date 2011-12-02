@@ -1,4 +1,4 @@
-# pd
+# pd [![Build Status][1]][2]
 
 Helping you do prototypical OO
 
@@ -195,6 +195,8 @@ node tests/pd-test.js
 
 ## MIT Licenced
 
+  [1]: https://secure.travis-ci.org/Raynos/pd.png
+  [2]: http://travis-ci.org/Raynos/pd
   [3]: http://raynos.org/blog/4/Doing-Object-Oriented-JavaScript
   [4]: http://www.2ality.com/2011/06/prototypes-as-classes.html
   [5]: http://raynos.org/blog/5/Doing-Object-Oriented-Javascript---part-2
