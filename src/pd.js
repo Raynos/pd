@@ -1,14 +1,22 @@
-!(function (exports) {
+!(function _anonymousWrapper(global) {
     "use strict";
 
     /*
         Base object to inherit from, exposes extend, make and beget as methods
     */
     var Base = {
-        extend: operateOnThis(extend),
-        make: operateOnThis(make),
-        beget: operateOnThis(beget)
-    };
+            extend: operateOnThis(extend),
+            make: operateOnThis(make),
+            beget: operateOnThis(beget)
+        },
+        Object = global.Object,
+        slice = [].slice,
+        call = Function.prototype.call,
+        getOwnPropertyNames = call.bind(Object.getOwnPropertyNames, Object),
+        getOwnPropertyDescriptor = 
+            call.bind(Object.getOwnPropertyDescriptor, Object),
+        create = call.bind(Object.create, Object),
+        defineProperty = call.bind(Object.defineProperty, Object);
 
     extend(getOwnPropertyDescriptors, {
         make: make,
@@ -19,23 +27,31 @@
         Base: Base
     });
 
-    exports(getOwnPropertyDescriptors);
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = getOwnPropertyDescriptors;
+    } else {
+        global.pd = getOwnPropertyDescriptors;
+    }
 
     /*
         pd will return all the own propertydescriptors of the object
 
-        @param Object obj - object to get pds from.
+        @param Object object - object to get pds from.
 
         @return Object - A hash of key/propertyDescriptors
     */    
-    function getOwnPropertyDescriptors(obj) {
-        var keys = Object.getOwnPropertyNames(obj);
-        var o = {};
-        keys.forEach(function _each(key) {
-            var pd = Object.getOwnPropertyDescriptor(obj, key);
-            o[key] = pd;
-        });
-        return o;
+    function getOwnPropertyDescriptors(object) {
+        var keys = getOwnPropertyNames(object),
+            returnObj = {};
+
+        keys.forEach(getPropertyDescriptor);
+
+        return returnObj;
+
+        function getPropertyDescriptor(key) {
+            var pd = getOwnPropertyDescriptor(object, key);
+            returnObj[key] = pd;
+        }
     }
 
     /*
@@ -50,14 +66,18 @@
         @return Object - the target
     */
     function extend(target) {
-        var objs = Array.prototype.slice.call(arguments, 1);
-        objs.forEach(function (obj) {
-            var props = Object.getOwnPropertyNames(obj);
+        var objs = slice.call(arguments, 1);
+
+        objs.forEach(extendTarget);
+
+        return target;
+
+        function extendTarget(obj) {
+            var props = getOwnPropertyNames(obj);
             props.forEach(function (key) {
                 target[key] = obj[key];
             });
-        });
-        return target;
+        }
     }
 
     /*
@@ -71,11 +91,13 @@
         @return Object - the new object
     */
     function make (proto) {
-        var o = Object.create(proto);
-        var args = [].slice.call(arguments, 1);
-        args.unshift(o);
+        var returnObj = create(proto),
+            args = slice.call(arguments, 1);
+
+        args.unshift(returnObj);
         extend.apply(null, args);
-        return o;
+
+        return returnObj;
     }
 
     /*
@@ -89,10 +111,15 @@
         @return Object - the newly created object
     */
     function beget(proto) {
-        var o = Object.create(proto);
-        var args = Array.prototype.slice.call(arguments, 1);
-        proto.constructor && proto.constructor.apply(o, args);
-        return o;
+        var returnObj = create(proto),
+            args = slice.call(arguments, 1),
+            constructor = proto.constructor;
+
+        if (constructor) {
+            constructor.apply(returnObj, args);
+        }
+
+        return returnObj;
     }
 
     /*
@@ -107,20 +134,22 @@
         @return Object privates
     */
     function defineNamespace(object, namespace) {
-        var privates = Object.create(object), 
+        var privates = create(object), 
             base = object.valueOf;
 
-        Object.defineProperty(object, 'valueOf', { 
-            value: function valueOf(value) {
-                if (value !== namespace || this !== object) {
-                    return base.apply(this, arguments);
-                } else {
-                    return privates;
-                }
-            }
+        defineProperty(object, 'valueOf', { 
+            value: valueOf
         });
 
         return privates;
+
+        function valueOf(value) {
+            if (value !== namespace || this !== object) {
+                return base.apply(this, arguments);
+            } else {
+                return privates;
+            }
+        }
     }
 
     /*
@@ -134,14 +163,16 @@
     function Name() {
         var namespace = {};
 
-        return function name(object) {
+        return name;
+
+        function name(object) {
             var privates = object.valueOf(namespace);
             if (privates !== object) {
                 return privates;
             } else {
                 return defineNamespace(object, namespace);
             }
-        };
+        }
     }
 
     /*
@@ -153,8 +184,10 @@
         @return Function - new function which invokes method with `this`
     */
     function operateOnThis(method) {
-        return function _onThis() {
-            var args = [].slice.call(arguments);
+        return onThis;
+
+        function onThis() {
+            var args = slice.call(arguments);
             return method.apply(null, [this].concat(args));
         }
     }
@@ -169,46 +202,36 @@
         prototypes === true && (prototypes = ["make", "beget", "extend"]);
 
         if (!Object.getOwnPropertyDescriptors) {
-            Object.defineProperty(Object, "getOwnPropertyDescriptors", {
-                value: getOwnPropertyDescriptors,
+            define(Object, "getOwnPropertyDescriptors", 
+                getOwnPropertyDescriptors);
+        }
+
+        ["extend", "make", "beget", "Name"].forEach(injectIntoGlobals);
+
+        return getOwnPropertyDescriptors;
+
+        function define(obj, name, value) {
+            defineProperty(obj, name, {
+                value: value,
                 configurable: true
             });
         }
 
-        [
-            "extend",
-            "make",
-            "beget",
-            "Name"
-        ].forEach(function (name) {
+        function injectIntoGlobals(name) {
+            var value = getOwnPropertyDescriptors[name],
+                objectProto = Object.prototype;
+
             if (!Object[name]) {
-                Object.defineProperty(Object, name, {
-                    value: getOwnPropertyDescriptors[name],
-                    configurable: true
-                });
+                define(Object, name, value);
             }
 
             if (name !== "Name" && 
-                !Object.prototype[name] &&
+                !objectProto[name] &&
                 prototypes.indexOf(name) !== -1
             ) {
-                Object.defineProperty(Object.prototype, name, {
-                    value: operateOnThis(getOwnPropertyDescriptors[name]),
-                    configurable: true
-                });
+                define(objectProto, name, operateOnThis(value));
             }
-        });
-
-        return getOwnPropertyDescriptors;
+        }
     }
 
-})(function (data) {
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = data;
-    } else {
-        window.pd = data;
-    }
-});
-
-
-
+})(global || window);
