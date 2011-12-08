@@ -1,4 +1,4 @@
-!(function _anonymousWrapper(global) {
+!function _anonymousWrapper() {
     "use strict";
 
     /*
@@ -30,7 +30,7 @@
     if (typeof module !== "undefined" && module.exports) {
         module.exports = getOwnPropertyDescriptors;
     } else {
-        global.pd = getOwnPropertyDescriptors;
+        window.pd = getOwnPropertyDescriptors;
     }
 
     /*
@@ -234,4 +234,4 @@
         }
     }
 
-})(global || window);
+}();
