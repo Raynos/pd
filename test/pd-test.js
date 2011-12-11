@@ -128,6 +128,28 @@ module.exports = {
 
         var c = Child.beget();
         assert(c.foo === "bar");
+    },
+    "test bindAll": function () {
+        var o = {
+            foo: function () { return this; },
+            bar: function () { return this; },
+            baz: function () { return this; }
+        };
+
+        var one = pd.extend({}, o);
+        pd.bindAll(one);
+        var foo = one.foo;
+        var bar = one.bar;
+        assert(foo() === one);
+        assert(bar() === one);
+
+        var two = pd.extend({}, o);
+        pd.bindAll(two, ["bar"]);
+        var foo = two.foo;
+        var bar = two.bar;
+        assert(foo() === global);
+        console.log(two.bar === o.bar);
+        assert(bar() === two);
     }
 };
 

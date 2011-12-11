@@ -110,6 +110,24 @@ pd.beget takes a prototype and creates a new instance of it. it will then call t
     o.method(); // "method"
 
 This basically is meant as sugar to allow ["prototypes as classes"][4]
+
+### pd.bindAll (obj, optionalWhitelist) <a name="pd.bindAll" href="#pd.bindAll"><small><sup>link</sup></small></a>
+
+pd.bindAll is similar to underscore's bindAll method. It takes an object and binds all it's methods to the object. It takes an optional whitelist parameter to only bind some methods
+
+    var o = {
+        constructor() { 
+            pd.bindAll(this, ["draw"]);
+        }
+        draw: function () { 
+            /* use `this` with its "correct" value, i.e. `o` */
+        },
+        start: function (eventEmitter) {
+            // note `this.draw` would not work correctly if it wasn't bound
+            eventEmitter.on("draw", this.draw);
+        }
+    };
+
     
 ### pd.extendNatives <a name="pd.extendNatives" href="#pd.extendNatives"><small><sup>link</sup></small></a>
 
@@ -169,7 +187,7 @@ Example:
 
 ### pd.Base <a name="pd.Base" href="#pd.Base"><small><sup>link</sup></small></a>
 
-There is also a `pd.Base` object which has the method `extend`, `beget` and `make` defined on it.
+There is also a `pd.Base` object which has the method `extend`, `beget`, `bindAll` and `make` defined on it.
 
 This means you can program in a style that would normally require extending `Object.prototype`.
 

@@ -4,12 +4,7 @@
     /*
         Base object to inherit from, exposes extend, make and beget as methods
     */
-    var Base = {
-            extend: operateOnThis(extend),
-            make: operateOnThis(make),
-            beget: operateOnThis(beget)
-        },
-        Object = global.Object,
+    var Base = {},
         slice = [].slice,
         call = Function.prototype.call,
         getOwnPropertyNames = call.bind(Object.getOwnPropertyNames, Object),
@@ -19,12 +14,13 @@
         defineProperty = call.bind(Object.defineProperty, Object);
 
     extend(getOwnPropertyDescriptors, {
-        make: make,
-        extend: extend,
+        Base: Base,
         beget: beget,
+        bindAll: bindAll,
+        extend: extend,
         extendNatives: extendNatives,
-        Name: Name,
-        Base: Base
+        make: make,
+        Name: Name
     });
 
     if (typeof module !== "undefined" && module.exports) {
@@ -90,7 +86,7 @@
 
         @return Object - the new object
     */
-    function make (proto) {
+    function make(proto) {
         var returnObj = create(proto),
             args = slice.call(arguments, 1);
 
@@ -121,6 +117,33 @@
 
         return returnObj;
     }
+
+    /*
+        bindAll binds all methods to have their context set to the object
+
+        @param Object obj - the object to bind methods on
+        @param Array methods - optional whitelist of methods to bind
+
+        @return Object - the bound object
+    */
+    function bindAll(obj, whitelist) {
+        var keys = Object.keys(obj).filter(stripNonMethods);
+
+        whitelist = whitelist || keys;
+
+        whitelist.forEach(bindMethod);
+
+        function stripNonMethods(name) {
+            return typeof obj[name] === "function";
+        }
+
+        function bindMethod(name) {
+            obj[name] = obj[name].bind(obj);
+        }
+
+        return obj;
+    }
+
 
     /*
         defines a namespace object. This hides a "privates" object on object 
@@ -219,17 +242,22 @@
 
         function injectIntoGlobals(name) {
             var value = getOwnPropertyDescriptors[name],
+                thisValue = operateOnThis(value),
                 objectProto = Object.prototype;
 
             if (!Object[name]) {
                 define(Object, name, value);
             }
 
+            if (name !== "Name" && !Base[name]) {
+                define(Base, name, thisValue);
+            }
+
             if (name !== "Name" && 
                 !objectProto[name] &&
                 prototypes.indexOf(name) !== -1
             ) {
-                define(objectProto, name, operateOnThis(value));
+                define(objectProto, name, thisValue);
             }
         }
     }
