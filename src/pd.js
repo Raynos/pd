@@ -22,6 +22,13 @@
         make: make,
         Name: Name
     });
+    
+    extend(Base, {
+        beget: operateOnThis(beget),
+        bindAll: operateOnThis(bindAll),
+        extend: operateOnThis(extend),
+        make: operateOnThis(make)
+    });
 
     if (typeof module !== "undefined" && module.exports) {
         module.exports = getOwnPropertyDescriptors;
@@ -129,9 +136,7 @@
     function bindAll(obj, whitelist) {
         var keys = Object.keys(obj).filter(stripNonMethods);
 
-        whitelist = whitelist || keys;
-
-        whitelist.forEach(bindMethod);
+        (whitelist || keys).forEach(bindMethod);
 
         function stripNonMethods(name) {
             return typeof obj[name] === "function";
@@ -222,7 +227,9 @@
             prototypes as well
     */
     function extendNatives(prototypes) {
-        prototypes === true && (prototypes = ["make", "beget", "extend"]);
+        if (prototypes === true) {
+            prototypes = ["make", "beget", "extend", "bindAll"];
+        }
 
         if (!Object.getOwnPropertyDescriptors) {
             define(Object, "getOwnPropertyDescriptors",
@@ -249,12 +256,7 @@
                 define(Object, name, value);
             }
 
-            if (name !== "Name" && !Base[name]) {
-                define(Base, name, thisValue);
-            }
-
-            if (name !== "Name" && 
-                !objectProto[name] &&
+            if (!objectProto[name] &&
                 prototypes.indexOf(name) !== -1
             ) {
                 define(objectProto, name, thisValue);
