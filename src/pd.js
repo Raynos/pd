@@ -71,15 +71,17 @@
     function extend(target) {
         var objs = slice.call(arguments, 1);
 
-        objs.forEach(extendTarget);
+        objs.forEach(extendTargetWithProperties);
 
         return target;
 
-        function extendTarget(obj) {
+        function extendTargetWithProperties(obj) {
             var props = getOwnPropertyNames(obj);
-            props.forEach(function (key) {
+            props.forEach(extendTarget);
+            
+            function extendTarget(key) {
                 target[key] = obj[key];
-            });
+            }
         }
     }
 
