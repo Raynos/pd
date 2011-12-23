@@ -103,7 +103,7 @@
 
         args.unshift(returnObj);
         extend.apply(null, args);
-        proto.constructor && proto.constructor.prototype = proto;
+        proto.constructor && (proto.constructor.prototype = proto);
 
         return returnObj;
     }
