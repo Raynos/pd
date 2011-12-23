@@ -87,6 +87,8 @@
 
     /*
         make will call Object.create with the proto and pd(props)
+        
+        Note, make also fixes the constructor <-> prototype link.
 
         @param Object proto - the prototype to inherit from
         @arguments Array [proto, ...] - the rest of the arguments will
@@ -101,6 +103,7 @@
 
         args.unshift(returnObj);
         extend.apply(null, args);
+        proto.constructor && proto.constructor.prototype = proto;
 
         return returnObj;
     }
