@@ -103,7 +103,9 @@
 
         args.unshift(returnObj);
         extend.apply(null, args);
-        proto.constructor && (proto.constructor.prototype = proto);
+        if (proto.hasOwnProperty('constructor')) {
+            proto.constructor.prototype = proto
+        };
 
         return returnObj;
     }
