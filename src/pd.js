@@ -1,20 +1,12 @@
-"use strict";
-
-var slice = [].slice,
-    call = Function.prototype.call,
-    getOwnPropertyNames = call.bind(Object.getOwnPropertyNames, Object),
-    getOwnPropertyDescriptor = 
-        call.bind(Object.getOwnPropertyDescriptor, Object),
-    create = call.bind(Object.create, Object),
-    defineProperty = call.bind(Object.defineProperty, Object);
+var slice = [].slice;
 
 extend(getOwnPropertyDescriptors, {
-    bindAll: bindAll,
-    extend: extend,
-    Name: Name
+    "bindAll": bindAll,
+    "extend": extend,
+    "Name": Name
 });
 
-module.exports = getOwnPropertyDescriptors;
+module["exports"] = getOwnPropertyDescriptors;
 
 /*
     pd will return all the own propertydescriptors of the object
@@ -24,7 +16,7 @@ module.exports = getOwnPropertyDescriptors;
     @return Object - A hash of key/propertyDescriptors
 */    
 function getOwnPropertyDescriptors(object) {
-    var keys = getOwnPropertyNames(object),
+    var keys = Object.getOwnPropertyNames(object),
         returnObj = {};
 
     keys.forEach(getPropertyDescriptor);
@@ -32,7 +24,7 @@ function getOwnPropertyDescriptors(object) {
     return returnObj;
 
     function getPropertyDescriptor(key) {
-        var pd = getOwnPropertyDescriptor(object, key);
+        var pd = Object.getOwnPropertyDescriptor(object, key);
         returnObj[key] = pd;
     }
 }
@@ -56,11 +48,11 @@ function extend(target) {
     return target;
 
     function extendTargetWithProperties(source) {
-        getOwnPropertyNames(source).forEach(extendTarget);
+        Object.getOwnPropertyNames(source).forEach(extendTarget);
         
         function extendTarget(key) {
-            defineProperty(target, key, 
-                getOwnPropertyDescriptor(source, key));
+            Object.defineProperty(target, key, 
+                Object.getOwnPropertyDescriptor(source, key));
         }
     }
 }
@@ -102,10 +94,10 @@ function bindAll(obj, whitelist) {
     @return Object privates
 */
 function defineNamespace(object, namespace) {
-    var privates = create(object), 
+    var privates = Object.create(object), 
         base = object.valueOf;
 
-    defineProperty(object, 'valueOf', {
+    Object.defineProperty(object, 'valueOf', {
         value: valueOf
     });
 
