@@ -82,35 +82,6 @@ is the same as
     
 pd.extend returns the first object you pass in.
 
-### pd.make (proto, props...) <a name="pd.make" href="#pd.make"><small><sup>link</sup></small></a>
-
-pd.make takes a prototype and some properties, it creates a new instance of the prototype and extends that instances with the properties.
-
-    pd.make(Proto, {
-        prop: "42"
-    }, {
-        another_prop: 42
-    });
-
-### pd.beget (proto, args..) <a name="pd.beget" href="#pd.beget"><small><sup>link</sup</small></a>
-
-pd.beget takes a prototype and creates a new instance of it. it will then call the constructor property of the new instance with the arguments and finally returns the object
-
-    var Proto = {
-        method: function () {
-            console.log("method");
-        },
-        constructor: function (arg) {
-            console.log("constructed", arg);    
-        }
-    };
-
-    var o = pd.beget(Proto, 42); // "constructed", 42
-    console.log(Proto.isPrototypeOf(o)); // true
-    o.method(); // "method"
-
-This basically is meant as sugar to allow ["prototypes as classes"][4]
-
 ### pd.bindAll (obj, optionalWhitelist) <a name="pd.bindAll" href="#pd.bindAll"><small><sup>link</sup></small></a>
 
 pd.bindAll is similar to underscore's bindAll method. It takes an object and binds all it's methods to the object. It takes an optional whitelist parameter to only bind some methods
@@ -127,42 +98,6 @@ pd.bindAll is similar to underscore's bindAll method. It takes an object and bin
             eventEmitter.on("draw", this.draw);
         }
     };
-
-    
-### pd.extendNatives <a name="pd.extendNatives" href="#pd.extendNatives"><small><sup>link</sup></small></a>
-
-pd.extendNatives extends some native objects and then returns pd.
-
-Specifically it will set the following if they don't exist
-
- - Object.extend (same as pd.extend)
- - Object.getOwnPropertyDescriptors (same as pd)
- - Object.beget (same as pd.beget)
- - Object.make (same as pd.make)
- - Object.Name (same as pd.Name)
-
-It will also augment `Object.prototype` if you pass in `true` as the first argument
-You can also pass an array of properties you want it to be extended with.
-
-Example:
-
-    pd.extendNatives(["beget"])
-
- - Object.prototype.beget (same as pd.beget)
- - Object.prototype.make (same as pd.make)
- - Object.prototype.extend (same as pd.extend)
-
-An example of `.beget` which only takes arguments
-
-    var instance = Proto.beget(42)
-
-An example of `.make` which only extends it with one argument
-
-    var SubClass = Proto.make({ /* subclass properties */ })
-
-An example of `.extend` (extend mutates the object)
-
-    Proto.extend({ /* more proto properties */ })
 
 ### pd.Name <a name="pd.Name" href="#pdName"><small><sup>link</sup</small></a>
 
@@ -184,19 +119,6 @@ Example:
             }
         };
     }());
-
-### pd.Base <a name="pd.Base" href="#pd.Base"><small><sup>link</sup></small></a>
-
-There is also a `pd.Base` object which has the method `extend`, `beget`, `bindAll` and `make` defined on it.
-
-This means you can program in a style that would normally require extending `Object.prototype`.
-
-Example:
-
-    var Child = pd.Base.make({ /* child props */ });
-    Child.extend({ /* more props */ });
-
-    var childInstance = Child.beget();
 
 ## Installation
 

@@ -1,274 +1,144 @@
-!function _anonymousWrapper() {
-    "use strict";
+"use strict";
 
-    /*
-        Base object to inherit from, exposes extend, make and beget as methods
-    */
-    var Base = {},
-        slice = [].slice,
-        call = Function.prototype.call,
-        getOwnPropertyNames = call.bind(Object.getOwnPropertyNames, Object),
-        getOwnPropertyDescriptor = 
-            call.bind(Object.getOwnPropertyDescriptor, Object),
-        create = call.bind(Object.create, Object),
-        defineProperty = call.bind(Object.defineProperty, Object);
+var slice = [].slice,
+    call = Function.prototype.call,
+    getOwnPropertyNames = call.bind(Object.getOwnPropertyNames, Object),
+    getOwnPropertyDescriptor = 
+        call.bind(Object.getOwnPropertyDescriptor, Object),
+    create = call.bind(Object.create, Object),
+    defineProperty = call.bind(Object.defineProperty, Object);
 
-    extend(getOwnPropertyDescriptors, {
-        Base: Base,
-        beget: beget,
-        bindAll: bindAll,
-        extend: extend,
-        extendNatives: extendNatives,
-        make: make,
-        Name: Name
-    });
-    
-    extend(Base, {
-        beget: operateOnThis(beget),
-        bindAll: operateOnThis(bindAll),
-        extend: operateOnThis(extend),
-        make: operateOnThis(make)
-    });
+extend(getOwnPropertyDescriptors, {
+    bindAll: bindAll,
+    extend: extend,
+    Name: Name
+});
 
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = getOwnPropertyDescriptors;
-    } else {
-        window.pd = getOwnPropertyDescriptors;
+module.exports = getOwnPropertyDescriptors;
+
+/*
+    pd will return all the own propertydescriptors of the object
+
+    @param Object object - object to get pds from.
+
+    @return Object - A hash of key/propertyDescriptors
+*/    
+function getOwnPropertyDescriptors(object) {
+    var keys = getOwnPropertyNames(object),
+        returnObj = {};
+
+    keys.forEach(getPropertyDescriptor);
+
+    return returnObj;
+
+    function getPropertyDescriptor(key) {
+        var pd = getOwnPropertyDescriptor(object, key);
+        returnObj[key] = pd;
     }
+}
 
-    /*
-        pd will return all the own propertydescriptors of the object
+/*
+    Extend will extend the firat parameter with any other parameters 
+    passed in. Only the own property names will be extended into
+    the object
 
-        @param Object object - object to get pds from.
+    @param Object target - target to be extended
+    @arguments Array [target, ...] - the rest of the objects passed
+        in will extended into the target
 
-        @return Object - A hash of key/propertyDescriptors
-    */    
-    function getOwnPropertyDescriptors(object) {
-        var keys = getOwnPropertyNames(object),
-            returnObj = {};
+    @return Object - the target
+*/
+function extend(target) {
+    var objs = slice.call(arguments, 1);
 
-        keys.forEach(getPropertyDescriptor);
+    objs.forEach(extendTargetWithProperties);
 
-        return returnObj;
+    return target;
 
-        function getPropertyDescriptor(key) {
-            var pd = getOwnPropertyDescriptor(object, key);
-            returnObj[key] = pd;
-        }
-    }
-
-    /*
-        Extend will extend the firat parameter with any other parameters 
-        passed in. Only the own property names will be extended into
-        the object
-
-        @param Object target - target to be extended
-        @arguments Array [target, ...] - the rest of the objects passed
-            in will extended into the target
-
-        @return Object - the target
-    */
-    function extend(target) {
-        var objs = slice.call(arguments, 1);
-
-        objs.forEach(extendTargetWithProperties);
-
-        return target;
-
-        function extendTargetWithProperties(obj) {
-            var props = getOwnPropertyNames(obj);
-            props.forEach(extendTarget);
-            
-            function extendTarget(key) {
-                target[key] = obj[key];
-            }
-        }
-    }
-
-    /*
-        make will call Object.create with the proto and pd(props)
+    function extendTargetWithProperties(source) {
+        getOwnPropertyNames(source).forEach(extendTarget);
         
-        Note, make also fixes the constructor <-> prototype link.
-
-        @param Object proto - the prototype to inherit from
-        @arguments Array [proto, ...] - the rest of the arguments will
-            be mixed into the object, i.e. the object will be extend
-            with the objects
-
-        @return Object - the new object
-    */
-    function make(proto) {
-        var returnObj = create(proto),
-            args = slice.call(arguments, 1);
-
-        args.unshift(returnObj);
-        extend.apply(null, args);
-        if (proto.hasOwnProperty('constructor')) {
-            proto.constructor.prototype = proto
-        };
-
-        return returnObj;
-    }
-
-    /*
-        beget will generate a new object from the proto, any other arguments
-        will be passed to proto.constructor
-
-        @param Object proto - the prototype to use for the new object
-        @arguments Array [proto, ...] - the rest of the arguments will
-            be passed into proto.constructor
-
-        @return Object - the newly created object
-    */
-    function beget(proto) {
-        var returnObj = create(proto),
-            args = slice.call(arguments, 1),
-            constructor = proto.constructor;
-
-        if (constructor) {
-            constructor.apply(returnObj, args);
-        }
-
-        return returnObj;
-    }
-
-    /*
-        bindAll binds all methods to have their context set to the object
-
-        @param Object obj - the object to bind methods on
-        @param Array methods - optional whitelist of methods to bind
-
-        @return Object - the bound object
-    */
-    function bindAll(obj, whitelist) {
-        var keys = Object.keys(obj).filter(stripNonMethods);
-
-        (whitelist || keys).forEach(bindMethod);
-
-        function stripNonMethods(name) {
-            return typeof obj[name] === "function";
-        }
-
-        function bindMethod(name) {
-            obj[name] = obj[name].bind(obj);
-        }
-
-        return obj;
-    }
-
-
-    /*
-        defines a namespace object. This hides a "privates" object on object 
-        under the "key" namespace
-
-        @param Object object - object to hide a privates object on
-        @param Object namespace - key to hide it under
-
-        @author Gozala : https://gist.github.com/1269991
-
-        @return Object privates
-    */
-    function defineNamespace(object, namespace) {
-        var privates = create(object), 
-            base = object.valueOf;
-
-        defineProperty(object, 'valueOf', {
-            value: valueOf
-        });
-
-        return privates;
-
-        function valueOf(value) {
-            if (value !== namespace || this !== object) {
-                return base.apply(this, arguments);
-            } else {
-                return privates;
-            }
+        function extendTarget(key) {
+            defineProperty(target, key, 
+                getOwnPropertyDescriptor(source, key));
         }
     }
+}
 
-    /*
-        Constructs a Name function, when given an object it will return a
-        privates object. 
+/*
+    bindAll binds all methods to have their context set to the object
 
-        @author Gozala : https://gist.github.com/1269991
+    @param Object obj - the object to bind methods on
+    @param Array methods - optional whitelist of methods to bind
 
-        @return Function name
-    */
-    function Name() {
-        var namespace = {};
+    @return Object - the bound object
+*/
+function bindAll(obj, whitelist) {
+    var keys = Object.keys(obj).filter(stripNonMethods);
 
-        return name;
+    (whitelist || keys).forEach(bindMethod);
 
-        function name(object) {
-            var privates = object.valueOf(namespace);
-            if (privates !== object) {
-                return privates;
-            } else {
-                return defineNamespace(object, namespace);
-            }
-        }
+    function stripNonMethods(name) {
+        return typeof obj[name] === "function";
     }
 
-    /*
-        Utility function, takes a function and returns a new function
-            which will curry `this` as the first argument
-
-        @param Function method - method to curry this on
-
-        @return Function - new function which invokes method with `this`
-    */
-    function operateOnThis(method) {
-        return onThis;
-
-        function onThis() {
-            var args = slice.call(arguments);
-            return method.apply(null, [this].concat(args));
-        }
+    function bindMethod(name) {
+        obj[name] = obj[name].bind(obj);
     }
 
-    /*
-        Will extend native objects with utility methods
+    return obj;
+}
 
-        @param Boolean prototypes - flag to indicate whether you want to extend
-            prototypes as well
-    */
-    function extendNatives(prototypes) {
-        if (prototypes === true) {
-            prototypes = ["make", "beget", "extend", "bindAll"];
-        }
 
-        if (!Object.getOwnPropertyDescriptors) {
-            define(Object, "getOwnPropertyDescriptors",
-                getOwnPropertyDescriptors);
-        }
+/*
+    defines a namespace object. This hides a "privates" object on object 
+    under the "key" namespace
 
-        ["extend", "make", "beget", "Name"].forEach(injectIntoGlobals);
+    @param Object object - object to hide a privates object on
+    @param Object namespace - key to hide it under
 
-        return getOwnPropertyDescriptors;
+    @author Gozala : https://gist.github.com/1269991
 
-        function define(obj, name, value) {
-            defineProperty(obj, name, {
-                value: value,
-                configurable: true
-            });
-        }
+    @return Object privates
+*/
+function defineNamespace(object, namespace) {
+    var privates = create(object), 
+        base = object.valueOf;
 
-        function injectIntoGlobals(name) {
-            var value = getOwnPropertyDescriptors[name],
-                thisValue = operateOnThis(value),
-                objectProto = Object.prototype;
+    defineProperty(object, 'valueOf', {
+        value: valueOf
+    });
 
-            if (!Object[name]) {
-                define(Object, name, value);
-            }
+    return privates;
 
-            if (!objectProto[name] &&
-                prototypes.indexOf(name) !== -1
-            ) {
-                define(objectProto, name, thisValue);
-            }
+    function valueOf(value) {
+        if (value !== namespace || this !== object) {
+            return base.apply(this, arguments);
+        } else {
+            return privates;
         }
     }
+}
 
-}();
+/*
+    Constructs a Name function, when given an object it will return a
+    privates object. 
+
+    @author Gozala : https://gist.github.com/1269991
+
+    @return Function name
+*/
+function Name() {
+    var namespace = {};
+
+    return name;
+
+    function name(object) {
+        var privates = object.valueOf(namespace);
+        if (privates !== object) {
+            return privates;
+        } else {
+            return defineNamespace(object, namespace);
+        }
+    }
+}
