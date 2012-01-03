@@ -126,7 +126,7 @@ Example:
 
 ## Test
 
-`node tests/pd-test.js`
+`make test`
 
 ## Contributors
 
