@@ -1,4 +1,4 @@
-var pd = require("../src/pd.js"),
+var pd = require("../lib/pd.js"),
     assert = require("assert");
     
 suite("pd", function () {
