@@ -6,17 +6,17 @@ Helping you do prototypical OO
 
 ## Example 
 
-    var Animal = pd.Base.make({
+    var Animal = {
         legs: 4,
         walk: function () { ... }
-    });
+    };
 
-    var Cat = Animal.make({
+    var Cat = pd.extend(Object.create(Animal), {
         nyan: function () { ... },
-        constructor: function () { this.lives = 9; }
+        constructor: function () { this.lives = 9; return this; }
     });
 
-    var cat = Cat.beget();
+    var cat = Object.create(Cat).constructor();
 
 ## Motivation
 
@@ -35,7 +35,7 @@ pd solves this with utilities and sugar.
 
 ### pd (obj) <a name="pd" href="#pd"><small><sup>link</sup></small></a>
 
-pd converts all the values of your objects properties into propertydescriptors of those values.
+pd converts all the values of your objects properties into property descriptors of those values.
 
     pd({
         "foo": "bar"
@@ -122,11 +122,11 @@ Example:
 
 ## Installation
 
-npm install pd
+`npm install pd`
 
 ## Test
 
-node tests/pd-test.js
+`node tests/pd-test.js`
 
 ## Contributors
 
