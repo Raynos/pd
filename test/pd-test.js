@@ -88,6 +88,12 @@ suite("pd", function () {
         assert(foo() === global);   
         assert(bar() === two);
     });
+
+    test("Name", function () {
+        var name = pd.Name();
+        name(name).foo = 42;
+        assert(name(name).foo === 42);
+    });
 });
 
 
