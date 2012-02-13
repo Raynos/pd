@@ -120,6 +120,10 @@ Example:
         };
     }());
 
+### pd.mixin <a name="mixin" href="#mixin"><small><sup>link</sup></small></a>
+
+### pd.combine <a name="combine" href="#combine"><small><sup>link</sup></small></a>
+
 ## Installation
 
 `npm install pd`

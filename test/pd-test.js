@@ -94,6 +94,28 @@ suite("pd", function () {
         name(name).foo = 42;
         assert(name(name).foo === 42);
     });
+
+    test("mixin", function () {
+        var o = {
+            constructor: function () {
+                this.foo = "foo";
+                return this;
+            }
+        };
+
+        var p = {
+            constructor: function () {
+                this.bar = "bar";
+                return this;
+            }
+        };
+
+        pd.mixin(o, p);
+
+        o.constructor();
+        assert.equal(o.foo, "foo");
+        assert.equal(o.bar, "bar");
+    });
 });
 
 
