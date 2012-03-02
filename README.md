@@ -33,7 +33,7 @@ pd solves this with utilities and sugar.
 
 ## Documentation
 
-### pd (obj) <a name="pd" href="#pd"><small><sup>link</sup></small></a>
+### <a name="pd" href="#pd">pd (obj)</a>
 
 pd converts all the values of your objects properties into property descriptors of those values.
 
@@ -52,7 +52,7 @@ is the same as
         }
     }
 
-### pd.extend (obj..) <a name="pd.extend" href="#pd.extend"><small><sup>link</sup></small></a>
+### <a name="pd.extend" href="#pd.extend">pd.extend (obj..)</a>
 
 pd.extend extends an object with other objects. key clashes are given right preference
 
@@ -82,16 +82,17 @@ is the same as
     
 pd.extend returns the first object you pass in.
 
-### pd.bindAll (obj, optionalWhitelist) <a name="pd.bindAll" href="#pd.bindAll"><small><sup>link</sup></small></a>
+### <a name="pd.bindAll" href="#pd.bindAll">pd.bindAll (obj..)</a>
 
-pd.bindAll is similar to underscore's bindAll method. It takes an object and binds all it's methods to the object. It takes an optional whitelist parameter to only bind some methods
+pd.bindAll is similar to underscore's bindAll method. It takes an object and binds all it's methods to the object. It takes an optional list of objects to mix in
 
     var o = {
         constructor() { 
-            pd.bindAll(this, ["draw"]);
-        }
-        draw: function () { 
-            /* use `this` with its "correct" value, i.e. `o` */
+            pd.bindAll(this, {
+                draw: function () { 
+                    /* use `this` with its "correct" value, i.e. `o` */
+                }
+            });
         },
         start: function (eventEmitter) {
             // note `this.draw` would not work correctly if it wasn't bound
@@ -99,7 +100,7 @@ pd.bindAll is similar to underscore's bindAll method. It takes an object and bin
         }
     };
 
-### pd.Name <a name="pd.Name" href="#pdName"><small><sup>link</sup</small></a>
+### <a name="pd.Name" href="#pdName">pd.Name</a>
 
 pd.Name constructs a Name function. This name function when passed your object will
 return a privates object. This privates object cannot be accessed in any other 
@@ -119,10 +120,6 @@ Example:
             }
         };
     }());
-
-### pd.mixin <a name="mixin" href="#mixin"><small><sup>link</sup></small></a>
-
-### pd.combine <a name="combine" href="#combine"><small><sup>link</sup></small></a>
 
 ## Installation
 
