@@ -87,7 +87,7 @@ pd.extend returns the first object you pass in.
 pd.bindAll is similar to underscore's bindAll method. It takes an object and binds all it's methods to the object. It takes an optional list of objects to mix in
 
     var o = {
-        constructor() { 
+        constructor: function () { 
             pd.bindAll(this, {
                 draw: function () { 
                     /* use `this` with its "correct" value, i.e. `o` */
