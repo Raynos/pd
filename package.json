@@ -1,13 +1,13 @@
 {
     "name": "pd", 
-    "version": "0.6.2",
+    "version": "0.6.3",
     "description": "Manage propertyDescriptors, an OO utility", 
     "keywords": ["oo", "oop", "propertydescriptor", "arch", "utility"], 
     "author": "Jake Verbaten <raynos2@gmail.com>",
     "repository": "git://github.com/Raynos/pd.git",
     "main": "lib/pd", 
     "engines": { 
-        "node": "0.6.x" 
+        "node": ">=0.4" 
     },
     "scripts": {
         "test": "make test"  
