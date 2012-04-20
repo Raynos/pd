@@ -98,8 +98,9 @@ suite("pd", function () {
         assert(name(name).foo === 42)
     })
 
-    test("memoize", function () {
-        var counter = 0
+    test("memoize", function (done) {
+        var counter = 0,
+            nextCounter = 3
 
         var foo = function (cb) {
             assert(this.apples === "potatoes")
@@ -113,7 +114,75 @@ suite("pd", function () {
         bar()
         bar()
 
+        var complex = function (name, cb) {
+            setTimeout(function () {
+                counter++
+                cb(name * 2, name + "b", 42)
+            }, 500)
+        }
+
+        var bar = pd.memoize(complex)
+
+        bar("foo", function (nan, b, world) {
+            assert(isNaN(nan))
+            assert(world === 42)
+            assert(b === "foob")
+            next()
+        })
+
+        bar("baz", function (nan, b, world) {
+            assert(isNaN(nan))
+            assert(world === 42)
+            assert(b === "bazb")  
+            next()
+        })
+
+        bar("foo", function (nan, b, world) {
+            assert(isNaN(nan))
+            assert(world === 42)
+            assert(b === "foob")
+            next()
+        })
+
+        function next() {
+            if (--nextCounter === 0) {
+                assert(counter === 3)
+                done()
+            }
+        }
+
         assert(counter === 1)
+    })
+
+    test("memoize with function", function (done) {
+        var count = 0,
+            nextCount = 2
+
+        var foo = pd.memoize(function (cb) {
+            setTimeout(function () {
+                count++
+                cb({ foo: "foo" }, { bar: "bar" })
+            }, 500)
+        })
+
+        foo(function (foo, bar) {
+            assert(foo.foo === "foo")
+            assert(bar.bar === "bar")
+            next()
+        })
+
+        foo(function (foo, bar) {
+            assert(foo.foo === "foo")
+            assert(bar.bar === "bar")
+            next()
+        })
+
+        function next() {
+            if (--nextCount === 0) {
+                assert(count === 1)
+                done()
+            }
+        }
     })
 })
 
