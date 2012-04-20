@@ -1,39 +1,44 @@
-# pd [![Build Status][1]][2]
+# <a href="#pd" name="pd">pd</a> [![Build Status][1]][2]
 
 Helping you do prototypical OO
 
 ## Status: production ready
 
-## Example 
+## <a href="#Example" name="Example">Example</a>
+
+    var extend = require("pd").extend
 
     var Animal = {
         legs: 4,
         walk: function () { ... }
-    };
+    }
 
-    var Cat = pd.extend(Object.create(Animal), {
+    var Cat = extend({}, Animal, {
         nyan: function () { ... },
-        constructor: function () { this.lives = 9; return this; }
+        constructor: function () { 
+            this.lives = 9
+            return this;
+        }
     });
 
-    var cat = Object.create(Cat).constructor();
+    var cat = extend({}, Cat).constructor()
 
-## Motivation
+## <a href="#mov" nane="mov">Motivation</a>
 
 ES5 OO is [verbose][8]
 
 pd solves this with utilities and sugar.
 
-## Blog Posts
+## <a name="blogs" href="#blogs">Blog Posts</a>
 
  - [Improving ES5 OO][9]
  - [Doing OO JS part 3][6]
  - [Doing OO JS part 2][5]
  - [Doing Object Oriented JavaScript][3]
 
-## Documentation
+## <a name="Documentation" href="#Documentation">Documentation</a>
 
-### <a name="pd" href="#pd">pd (obj)</a>
+### <a name="pd.pd" href="#pd.pd">pd (obj)</a>
 
 pd converts all the values of your objects properties into property descriptors of those values.
 
@@ -100,13 +105,11 @@ pd.bindAll is similar to underscore's bindAll method. It takes an object and bin
         }
     };
 
-### <a name="pd.Name" href="#pdName">pd.Name</a>
+### <a name="pd.Name" href="#pd.Name">pd.Name</a>
 
 pd.Name constructs a Name function. This name function when passed your object will
 return a privates object. This privates object cannot be accessed in any other 
 way then calling Name.
-
-Example:
 
     var Klass = (function () {
         var privates = pd.Name();
@@ -120,6 +123,31 @@ Example:
             }
         };
     }());
+
+### <a name="pd.memoize" href="#pd.memoize">pd.memoize(fn[, context[, hasher]]</a>
+
+pd.memoize caches the results of an asynchronous function. Pass in an optional
+context so the fn is called with the context and pass in an optional hasher so
+you can choose how your the arguments of the returned memoized function should
+map to results
+
+    var f = pd.memoize(asyncFunction),
+        start = Date.now()
+
+    f(10)
+    f(10)
+    f(10)
+
+    var time_taken = Date.now() - start // roughly 500
+    // because asyncFunction is memoized, the second and third call return
+    // at the same time as the first, and any call after that returns
+    // immediately
+
+    function asyncFunction(key, callback) {
+        setTimeout(function () {
+            callback(key * 2)
+        }, 500)
+    }
 
 ## Installation
 

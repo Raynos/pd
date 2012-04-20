@@ -97,6 +97,24 @@ suite("pd", function () {
         name(name).foo = 42
         assert(name(name).foo === 42)
     })
+
+    test("memoize", function () {
+        var counter = 0
+
+        var foo = function (cb) {
+            assert(this.apples === "potatoes")
+            counter++
+            cb()
+        }
+
+        var bar = pd.memoize(foo, { apples: "potatoes" })
+
+        bar()
+        bar()
+        bar()
+
+        assert(counter === 1)
+    })
 })
 
 
