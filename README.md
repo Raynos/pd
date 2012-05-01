@@ -15,13 +15,13 @@ Helping you do prototypical OO
 
     var Cat = extend({}, Animal, {
         nyan: function () { ... },
-        constructor: function () { 
+        initialize: function () { 
             this.lives = 9
             return this;
         }
     });
 
-    var cat = extend({}, Cat).constructor()
+    var cat = extend({}, Cat).initialize()
 
 ## <a href="#mov" nane="mov">Motivation</a>
 
@@ -37,25 +37,6 @@ pd solves this with utilities and sugar.
  - [Doing Object Oriented JavaScript][3]
 
 ## <a name="Documentation" href="#Documentation">Documentation</a>
-
-### <a name="pd.pd" href="#pd.pd">pd (obj)</a>
-
-pd converts all the values of your objects properties into property descriptors of those values.
-
-    pd({
-        "foo": "bar"
-    })
-
-is the same as
-
-    {
-        "foo": {
-            "value": "bar",
-            "enumerable": true,
-            "writable": true,
-            "configurable": true
-        }
-    }
 
 ### <a name="pd.extend" href="#pd.extend">pd.extend (obj..)</a>
 
