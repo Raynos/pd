@@ -9,33 +9,7 @@ suite("pd", function () {
         assert(pd.bindAll)
     })
 
-    test("pd", function () {
-        var obj = {
-            "foo": "foobar",
-            "baz": /something/,
-            "faz": ["one", "two", "three"],
-            "obj": {
-                "baz": "booz"
-            },
-            get thing() {
-                return 42
-            },
-            set thingtwo(v) {
-                this._thingtwo = v
-            },
-            get thingthree() {
-                return 42
-            },
-            set thingthree(v) {
-                this._thingthree = v
-            }
-        }
-        var pds = pd(obj)
-        Object.getOwnPropertyNames(pds).forEach(function (name) {
-            assert.deepEqual(pds[name], 
-                Object.getOwnPropertyDescriptor(obj, name))
-        })
-    })
+   
 
     test("pd.extend", function () {
         var o1 = {
