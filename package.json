@@ -1,18 +1,25 @@
 {
     "name": "pd", 
-    "version": "0.7.4",
-    "description": "Manage propertyDescriptors, an OO utility", 
-    "keywords": ["oo", "oop", "propertydescriptor", "arch", "utility"], 
-    "author": "Jake Verbaten <raynos2@gmail.com>",
+    "version": "0.8.0",
+    "description": "an ES5 / OO utility", 
+    "keywords": ["oo", "oop", "arch", "utility", "util"], 
+    "author": "Raynos <raynos2@gmail.com>",
     "repository": "git://github.com/Raynos/pd.git",
-    "main": "lib/pd", 
-    "engines": { 
-        "node": ">=0.4" 
-    },
+    "main": "index",
     "scripts": {
         "test": "make test"  
     },
+    "homepage": "https://github.com/Raynos/pd",
+    "contributors": [{
+        "name": "Jake Verbaten"
+    }],
+    "bugs": { 
+        "url" : "https://github.com/Raynos/pd/issues",
+        "email" : "raynos2@gmail.com"
+    },
+    "license": "MIT",
+    "dependencies": {},
     "devDependencies": {
-        "mocha": "0.8.1"
+        "mocha": "1.0.3"
     }
 }
