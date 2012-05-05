@@ -17,7 +17,13 @@
         "url" : "https://github.com/Raynos/pd/issues",
         "email" : "raynos2@gmail.com"
     },
-    "license": "MIT",
+    "licenses": [{
+        "type": "MIT",
+        "url": "http://github.com/raynos/pd/raw/master/LICENSE"
+    }],
+    "engines": {
+        "node": ">=0.4"
+    },
     "dependencies": {},
     "devDependencies": {
         "mocha": "1.0.3"
