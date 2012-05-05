@@ -1,11 +1,11 @@
 {
     "name": "pd", 
-    "version": "0.8.0",
+    "version": "0.8.1",
     "description": "an ES5 / OO utility", 
     "keywords": ["oo", "oop", "arch", "utility", "util"], 
     "author": "Raynos <raynos2@gmail.com>",
     "repository": "git://github.com/Raynos/pd.git",
-    "main": "index",
+    "main": "lib/pd",
     "scripts": {
         "test": "make test"  
     },
